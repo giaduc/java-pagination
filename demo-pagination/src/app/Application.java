@@ -7,7 +7,7 @@ import javax.swing.UIManager;
  * @author giaduc
  */
 public class Application extends javax.swing.JFrame {
-    
+
     Pagination pagination;
 
     /**
@@ -18,6 +18,7 @@ public class Application extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         pagination = new Pagination();
         pagination.start();
+
     }
 
     /**

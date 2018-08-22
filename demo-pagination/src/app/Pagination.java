@@ -10,40 +10,69 @@ import model.PersonRepo;
  */
 public class Pagination {
 
-    private static final int PAGE_SIZE = 5;
-    private static int currentPage = 1;
-    private static int totalPages;
+    private int pageSize = 5;
+    private int currentPage = 1;
+    private List<Person> persons = PersonRepo.getAll();
+    private int totalPages;
+    private int mod;
 
-    private static final List<Person> PERSONS = PersonRepo.getAll();
-
-    private void loadPage(int start, int end) {
-        for (int i = start; i < end; i++) {
-            System.out.println(PERSONS.get(i));
-        }
+    public Pagination() {
+        totalPages = (int) Math.ceil(persons.size() / (double) pageSize);
+        mod = persons.size() % pageSize;
+        System.out.println("mod: " + mod);
     }
 
     public void start() {
-        for (int i = 0; i < PAGE_SIZE; i++) {
-            System.out.println(PERSONS.get(i));
-        }
+        int start = 0;
+        int end = persons.size() >= pageSize ? pageSize : persons.size();
+
+        loadPage(start, end);
     }
 
     public void nextPage() {
-        int current = currentPage + 1;
-        int start = current * PAGE_SIZE;
-        int end = start + PAGE_SIZE;
-        System.out.println("Current page: " + current);
-        System.out.println("Start: " + start);
-        System.out.println("End: " + end);
+        // TODO If currentPage < totalPages, increment the currentPage of 1. 
+        if (currentPage < totalPages) {
+            currentPage++;
+            System.out.println(currentPage);
+
+            // TODO Calculate start and end then call loadPage.
+            int start = (currentPage - 1) * pageSize;
+            int end = (start + pageSize) >= persons.size() ? start + mod : start + pageSize;
+            System.out.println("start" + start);
+            System.out.println("end" + end);
+
+            loadPage(start, end);
+        }
+
     }
 
     public void prevPage() {
-        int current = currentPage - 1;
-        int start = current * PAGE_SIZE;
-        int end = start + PAGE_SIZE;
-        System.out.println("Current page: " + current);
-        System.out.println("Start: " + start);
-        System.out.println("End: " + end);
+        // TODO If currentPage > 1, decrement the currentPage of 1.
+        if (currentPage > 1) {
+            currentPage--;
+            System.out.println(currentPage);
+
+            // TODO Calculate start and end then call loadPage.
+            int start = (currentPage - 1) * pageSize;
+            int end = start + pageSize;
+            System.out.println("start" + start);
+            System.out.println("end" + end);
+
+            loadPage(start, end);
+        }
+
+    }
+
+    /**
+     * Load items from @start to @end in list data source
+     *
+     * @param start
+     * @param end
+     */
+    private void loadPage(int start, int end) {
+        for (int i = start; i < end; i++) {
+            System.out.println(persons.get(i));
+        }
     }
 
 }
